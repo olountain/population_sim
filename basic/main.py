@@ -1,7 +1,7 @@
-from basic.basic_sim import move_dir
 import math
 import numpy as np
 
+# default movement function (random walk)
 def move_default(my_loc,max):
 
     x = my_loc[0]
@@ -31,7 +31,7 @@ def move_default(my_loc,max):
 
     return (x,y)
 
-
+# move towards a target
 def move_to_target(my_loc, target_loc):
 
     if my_loc == target_loc:
@@ -56,8 +56,7 @@ def move_to_target(my_loc, target_loc):
 
     return (x,y)
 
-move_to_target((5,4), (8,3))
-
+# find a target (need to update to include range/pathfinding)
 def get_target(my_loc, target_locs):
     distances = np.zeros(len(target_locs))
 
@@ -68,12 +67,13 @@ def get_target(my_loc, target_locs):
 
     return target_locs[index]
 
+# update which grid spaces are occupied
+def update_occupied(occupied, index, location):
+    occupied[index] = location
+    return occupied
 
 
-tmp = (1,2)
-tmp1 = tmp[1]
-
-
+# animal class
 class Animal:
 
     def __init__(self, location = None, move_speed = None, status = "default"):
@@ -82,19 +82,48 @@ class Animal:
         if move_speed is None:
             self.move_speed = 5
 
+        self.hunger = 100
+        self.thirst = 100
+
         self.status = status
 
     status_options = ["default", "hungry", "chased"]
 
-    def move(self, i):
+    # called every iteration (frame)
+    def update(self, frame, occupied, index, plants):
+        # move animal
+        if frame % self.move_speed == 0:
+            self.move(occupied, plants)
+            update_occupied(occupied, index, self.location)
 
-        if i % self.move_speed != 0:
-            return
+        # update hunger (hard coded)
+        if frame % 1 == 0:
+            self.hunger -= 1
+
+        # update thirst (hard coded)
+        # if i % 4 == 0:
+        #     self.thirst -= 1
+
+        # update status
+        if self.status == "default":
+            if self.hunger < 40 and self.hunger < self.thirst and self.status != "hungry":
+                self.status = "hungry"
+            elif self.thirst < 40 and self.thirst < self.hunger and self.status != "thirsty":
+                self.status = "thirsty"
+            else:
+                self.status = "default"
+
+
+    def move(self, occupied, plants):
 
         # default movement
         if self.status == "default":
 
-            self.location = move_default(self.location, 100)
+            new_loc = move_default(self.location, 100)
+
+            if new_loc not in occupied:
+                self.location = new_loc
+
 
         # move towards food
         if self.status == "hungry":
@@ -103,16 +132,16 @@ class Animal:
 
             new_loc = move_to_target(self.location, target_loc)
 
-
-            self.location = new_loc
+            if new_loc not in occupied:
+                self.location = new_loc
 
             if self.location == target_loc:
+                self.hunger = 100
                 self.status = "default"
         
         return
 
-
-
+# function to generate animals and their locations
 def instantiate_animals(n = 1, size = 10, occupied = []):
 
     locs = [(0,0)] * n
@@ -135,40 +164,4 @@ def instantiate_animals(n = 1, size = 10, occupied = []):
         animals.append(a)
 
     return animals, locs
-
-an, tmp = instantiate_animals(10,10)
-
-occupied = []
-occupied + tmp
-
-
-
-
-
-
-plants = [(1,1),(2,3),(5,7),(10,13)]
-
-get_target((5,5), plants)
-
-
-
-a = Animal()
-a.status = "hungry"
-a.location = (5,5)
-
-curr_locs
-
-
-for i in range(1,101):
-    a.move(i)
-    print(a.location)
-    print(a.status)
-
-a.location = (5,5)
-a.move(5,100)
-a.location
-
-move_default(5,5,100)
-
-
 

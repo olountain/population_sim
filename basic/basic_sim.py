@@ -35,32 +35,32 @@ def move_dir(x,y,max):
 
 
 ## run sim
-n_dim = 100
-n_dim = dim
-n_iter = 100
+# n_dim = 100
+# n_dim = dim
+# n_iter = 100
 
-data = np.zeros((n_dim,n_dim))
+# data = np.zeros((n_dim,n_dim))
 
-cmap = colors.ListedColormap(['white', 'black'])
+# cmap = colors.ListedColormap(['white', 'black'])
 
-locations = [(k,l) for k in [0,25,50,75,99] for l in [0,25,50,75,99]]
-# locations = [(k,l) for k in [0,5,10,20,30, 40] for l in [0,5,10,20,30, 40]]
-for (x,y) in locations:
-    data[x,y] = 1
-my_plot = plt.matshow(data, cmap = cmap)
+# locations = [(k,l) for k in [0,25,50,75,99] for l in [0,25,50,75,99]]
+# # locations = [(k,l) for k in [0,5,10,20,30, 40] for l in [0,5,10,20,30, 40]]
+# for (x,y) in locations:
+#     data[x,y] = 1
+# my_plot = plt.matshow(data, cmap = cmap)
 
-for i in range(n_iter):
+# for i in range(n_iter):
 
-    for j in range(len(locations)):
-        (x,y) = locations[j]
-        data[x,y] = 0
+#     for j in range(len(locations)):
+#         (x,y) = locations[j]
+#         data[x,y] = 0
 
-        tmp = move_dir(x,y,n_dim-1)
-        x = tmp[0]
-        y = tmp[1]
+#         tmp = move_dir(x,y,n_dim-1)
+#         x = tmp[0]
+#         y = tmp[1]
 
-        data[x,y] = 1
-        locations[j] = (x,y)
+#         data[x,y] = 1
+#         locations[j] = (x,y)
 
-    my_plot.set_data(data)
-    plt.pause(0.1)
+#     my_plot.set_data(data)
+#     plt.pause(0.1)
