@@ -10,8 +10,8 @@ def generate_map(x_dim = 100, y_dim = 100, octaves = 4, translation = -0.1, n_pl
     my_indices = np.where(my_map == 1)
     occupied = [(my_indices[0][i], my_indices[1][i]) for i in range(len(my_indices[0]))]
 
-    my_indices = np.where(my_map == -1)
-    unoccupied = [(my_indices[0][i], my_indices[1][i]) for i in range(len(my_indices[0]))]
+    my_indices_2 = np.where(my_map == -1)
+    unoccupied = [(my_indices_2[0][i], my_indices_2[1][i]) for i in range(len(my_indices_2[0]))]
 
     plant_ind = np.random.choice(list(range(len(unoccupied))), n_plants, replace = False)
     plants = [unoccupied[i] for i in plant_ind]
@@ -19,12 +19,13 @@ def generate_map(x_dim = 100, y_dim = 100, octaves = 4, translation = -0.1, n_pl
     return my_map, occupied, plants
 
 
-## driver
+# # driver
 # my_map, occupied, plants = generate_map(x_dim = 100, y_dim = 100, n_plants = 500)
 
 # import matplotlib.pyplot as plt
 # from matplotlib.colors import ListedColormap
 # plt.imshow(my_map, cmap=ListedColormap(['green', 'blue']))
+# plt.imsave("basic/bg.png", my_map, cmap=ListedColormap(['green', 'blue']))
 # plt.show()
 
 
